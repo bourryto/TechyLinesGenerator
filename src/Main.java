@@ -8,6 +8,7 @@ public class Main extends PApplet {
     int yStart = 0;
     int xEnd = 0;
     int yEnd = 0;
+    int element_width = 50;
 
     GraphGame graphGame;
 
@@ -15,12 +16,13 @@ public class Main extends PApplet {
     }
 
     public void setup(){
-        int x = 4;
-        int y = 5;
-        surface.setSize((x)*100, (y)*100);
+        int x = 10;
+        int y = 17;
+        surface.setSize((x)*element_width, (y)*element_width);
         surface.setLocation(100,100);
+        surface.setResizable(true);
         graphGame = new GraphGame(x,y);
-        graphGame.generatePath(10);
+        graphGame.generatePath(20);
         System.out.println(graphGame.toString());
         System.out.println(graphGame.getPath());
     }
@@ -52,7 +54,7 @@ public class Main extends PApplet {
 
     // corecting position into the larger window
     private Integer corrPos(int a){
-        return a*100 + 50;
+        return a*element_width + element_width/2;
     }
 
 

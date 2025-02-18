@@ -10,17 +10,27 @@ public class GraphGame {
         path = new LinkedList<>();
     }
 
-    // TODO: for testpurposos, make this more modular, that we can also load a list of vertices
+    // todo: change so we only choose the next edge prom all actually viable edges, not all existing edges, to get a more consistent length
     public void generatePath(int maxLength){
         path.add(graph.vMap[0][2]);
         Random random = new Random();
+        int lastTurnDirection = 4;
         for (int i = 0; i < maxLength; i++) {
-            int dir = random.nextInt(0, 8);
             try {
                 Vertex o = path.getLast();
+                if (o.edges.isEmpty()){break;}                                  // stop if there are no more possible ways
                 Edge e = o.edges.get(random.nextInt(0, o.edges.size()));
                 Vertex n = e.getOther(path.getLast());
-                // Vertex n = graph.getNeighbour(path.getLast(), dir); // will be less efficient when we remove edges
+                boolean viableEdgesExist = false;
+                for (Edge oneEdge: o.edges){
+                    if(o.directionTo(oneEdge.getOther(o)) >= 3 && o.directionTo(oneEdge.getOther(o)) <= 5){viableEdgesExist = true;}
+                }
+                if (o.directionTo(n) < 3 || o.directionTo(n) > 5){continue;}    // only allowing downwards movement
+                if (!viableEdgesExist){break;}  // stop checing if there are no viable edges
+                if (lastTurnDirection == 3 && o.directionTo(n) == 5){continue;}
+                if (lastTurnDirection == 5 && o.directionTo(n) == 3){continue;}
+
+                lastTurnDirection = o.directionTo(n);
                 path.add(n);
                 graph.edges.remove(e);
                 o.edges.remove(e);
